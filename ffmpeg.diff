@@ -1,0 +1,33 @@
+--- libavdevice/x11grab.c.orig	2012-10-30 14:20:04.000000000 -0400
++++ libavdevice/x11grab.c	2013-04-29 21:23:55.962236548 -0400
+@@ -54,6 +54,10 @@
+ #include <X11/extensions/XShm.h>
+ #include <X11/extensions/Xfixes.h>
+ #include "avdevice.h"
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <unistd.h>
++
+ 
+ /**
+  * X11 Device Demuxer context
+@@ -470,6 +474,8 @@
+ 
+     int64_t curtime, delay;
+     struct timespec ts;
++    struct stat statbuf;
++    int ret;
+ 
+     /* Calculate the time of the next frame */
+     s->time_frame += INT64_C(1000000);
+@@ -552,7 +558,9 @@
+         }
+     }
+ 
+-    if (s->draw_mouse) {
++    ret = stat("/tmp/cursor_hidden", &statbuf);
++
++    if (s->draw_mouse && ret != 0) {
+         paint_mouse_pointer(image, s);
+     }
+ 
