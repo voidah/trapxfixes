@@ -1,0 +1,11 @@
+This .so traps and create a temporary file when the mouse cursor is hidden by an application (such as compiz ezoom plugin...) and delete it when the cursor returns visible.
+
+The ffmpeg patch provided (ffmpeg.diff) allows ffmpeg to stop recording hidden cursor by checking if that file is present. When the screen is zoomed in with ezoom, compiz hides the X11 mouse cursor and shows a custom scaled cursor. The problem is that ffmpeg still record the hidden cursor AND the compiz one.
+
+This is hackish, but:
+1) There is no way to ask XFIXES X11 extension if the cursor is hidden or visible
+2) There is no way to change an ffmpeg config value at runtime (to temporarly stop cursor recording: draw_mouse)
+3) There is no way to ask compiz ezoom plugin if the screen is currently zoomed in or not
+
+The nice thing it that it works fine
+
